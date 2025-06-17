@@ -132,6 +132,15 @@
         </button>
     </form>
 
+    <div class="container" style="margin-top: 30px;">
+        <h1>TSM Service Status</h1>
+
+        <div class="status"
+             th:text="'Status: ' + ${tsmStatus}"
+             th:classappend="${tsmStatus.equalsIgnoreCase('RUNNING') ? 'running' :
+                          (tsmStatus.equalsIgnoreCase('STOPPED') ? 'stopped' : 'initializing')}">
+        </div>
+    </div>
 
     <div class="log" th:if="${session.jbossLog}" th:text="${session.jbossLog}"></div>
 
