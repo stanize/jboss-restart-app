@@ -105,37 +105,25 @@ public class JBossRestartController {
     }
 
     private String getTsmStatus() {
-        try {
-            RestTemplate restTemplate = new RestTemplate();
+        String curlCommand = "curl -s --request POST " +
+                "--url http://localhost:8080/TAFJRestServices/resources/ofs " +
+                "--header \"Authorization: Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==\" " +
+                "--header \"cache-control: no-cache\" " +
+                "--header \"content-type: application/json\" " +
+                "--data '{\"ofsRequest\":\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \"}'";
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", TSM_AUTH_HEADER);
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setCacheControl(CacheControl.noCache());
+        String output = executeCommand(curlCommand);
 
-            String jsonBody = "{\"ofsRequest\":\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \"}";
-            HttpEntity<String> requestEntity = new HttpEntity<>(jsonBody, headers);
+        String extracted = extractServiceControl(output);
 
-            ResponseEntity<String> responseEntity = restTemplate.postForEntity(TSM_URL, requestEntity, String.class);
+        if (extracted == null) return "UNKNOWN";
 
-            if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                String body = responseEntity.getBody();
-                JsonNode root = new ObjectMapper().readTree(body);
-                String ofsResponse = extractServiceControl(root.path("ofsResponse").asText());
-
-                if (ofsResponse == null) return "UNKNOWN";
-
-                int idx = ofsResponse.indexOf('=');
-                return (idx != -1 && idx + 1 < ofsResponse.length())
-                        ? ofsResponse.substring(idx + 1).trim()
-                        : "UNKNOWN";
-            } else {
-                return "ERROR: bad response";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "ERROR";
+        int equalsIndex = extracted.indexOf('=');
+        if (equalsIndex != -1 && equalsIndex + 1 < extracted.length()) {
+            return extracted.substring(equalsIndex + 1).trim();
         }
+
+        return "UNKNOWN";
     }
 
     private String extractServiceControl(String ofsResponse) {
