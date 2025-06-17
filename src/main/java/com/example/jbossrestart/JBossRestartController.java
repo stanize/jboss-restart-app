@@ -1,13 +1,9 @@
 package com.example.jbossrestart;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -33,7 +29,7 @@ public class JBossRestartController {
     @GetMapping("/jboss-restart")
     public String showDashboard(Model model, HttpServletRequest request) {
         model.addAttribute("jbossStatus", checkJbossStatus());
-        model.addAttribute("tsmStatus", getTsmStatus());
+        model.addAttribute("tsmStatus", getTsmStatus(HttpServletRequest request));
         model.addAttribute("jbossLog", request.getSession().getAttribute("jbossLog"));
         request.getSession().removeAttribute("jbossLog");
         return "jboss-restart";
@@ -104,7 +100,7 @@ public class JBossRestartController {
         return output.toString();
     }
 
-    private String getTsmStatus() {
+    private String getTsmStatus(HttpServletRequest request) {
         String curlCommand = "curl -s --request POST " +
                 "--url http://localhost:8080/TAFJRestServices/resources/ofs " +
                 "--header \"Authorization: Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==\" " +
@@ -116,16 +112,21 @@ public class JBossRestartController {
 
         String extracted = extractServiceControl(output);
 
-        return output;
+        StringBuilder log = new StringBuilder();
 
-//        if (extracted == null) return "UNKNOWN";
-//
-//        int equalsIndex = extracted.indexOf('=');
-//        if (equalsIndex != -1 && equalsIndex + 1 < extracted.length()) {
-//            return extracted.substring(equalsIndex + 1).trim();
-//        }
-//
-//        return "UNKNOWN";
+        log.append(output);
+        request.getSession().setAttribute("jbossLog", log.toString());
+
+
+
+        if (extracted == null) return "UNKNOWN";
+
+        int equalsIndex = extracted.indexOf('=');
+        if (equalsIndex != -1 && equalsIndex + 1 < extracted.length()) {
+            return extracted.substring(equalsIndex + 1).trim();
+        }
+
+        return "UNKNOWN";
 
     }
 
