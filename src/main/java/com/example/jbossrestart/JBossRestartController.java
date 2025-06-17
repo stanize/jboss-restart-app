@@ -101,24 +101,20 @@ public class JBossRestartController {
     }
 
     private String getTsmStatus(HttpServletRequest request) {
-        String curlCommand = "curl -s --request POST " +
-                "--url http://localhost:8080/TAFJRestServices/resources/ofs " +
-                "--header \"Authorization: Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==\" " +
-                "--header \"cache-control: no-cache\" " +
-                "--header \"content-type: application/json\" " +
-                "--data '{\"ofsRequest\":\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \"}'";
+        String jsonBody = "{\"ofsRequest\":\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \"}";
+        String curlCommand = String.join(" ",
+                "curl -s --request POST",
+                "--url http://localhost:8080/TAFJRestServices/resources/ofs",
+                "--header \"Authorization: Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==\"",
+                "--header \"cache-control: no-cache\"",
+                "--header \"content-type: application/json\"",
+                "--data '" + jsonBody + "'"
+        );
 
-        String output = executeCommand(curlCommand);
-        System.out.println(output);
+        String response = executeCommand(curlCommand);
+        System.out.println("TSM response:\n" + response);
 
-        String extracted = extractServiceControl(output);
-
-        StringBuilder log = new StringBuilder();
-
-        log.append(output);
-        request.getSession().setAttribute("jbossLog", log.toString());
-
-
+        String extracted = extractServiceControl(response);
 
         if (extracted == null) return "UNKNOWN";
 
@@ -128,7 +124,6 @@ public class JBossRestartController {
         }
 
         return "UNKNOWN";
-
     }
 
     private String extractServiceControl(String ofsResponse) {
