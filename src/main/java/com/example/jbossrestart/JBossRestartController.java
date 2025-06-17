@@ -29,7 +29,7 @@ public class JBossRestartController {
     @GetMapping("/jboss-restart")
     public String showDashboard(Model model, HttpServletRequest request) {
         model.addAttribute("jbossStatus", checkJbossStatus());
-        model.addAttribute("tsmStatus", getTsmStatus(HttpServletRequest request));
+        model.addAttribute("tsmStatus", getTsmStatus(request));
         model.addAttribute("jbossLog", request.getSession().getAttribute("jbossLog"));
         request.getSession().removeAttribute("jbossLog");
         return "jboss-restart";
