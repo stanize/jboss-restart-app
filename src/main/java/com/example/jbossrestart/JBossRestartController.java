@@ -1,23 +1,32 @@
 package com.example.jbossrestart;
 
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class JBossRestartController {
 
-    @GetMapping("/")
-    public String index() {
+    @GetMapping("/jboss-restart")
+    public String showRestartPage(Model model, HttpServletRequest request) {
+        String status = getJbossStatus();
+        model.addAttribute("jbossStatus", status);
         return "jboss-restart";
     }
 
-    @PostMapping("/restart")
+    @PostMapping("/jboss-restart")
     public String restartJboss(HttpServletRequest request) {
         String output = executeCommand("sudo /bin/systemctl restart jboss");
-        request.getSession().setAttribute("jbossLog", output);
-        return "redirect:/";
+        request.getSession().setAttribute("jbossLog", "JBoss restart initiated.\n\n" + output);
+        return "redirect:/jboss-restart";
+    }
+
+    private String getJbossStatus() {
+        String output = executeCommand("systemctl is-active jboss").trim();
+        return output.equals("active") ? "Running" : "Stopped";
     }
 
     private String executeCommand(String command) {
