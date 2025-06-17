@@ -111,6 +111,7 @@ public class JBossRestartController {
                 "--data '" + jsonBody + "'"
         );
 
+        System.out.println("TSM request:\n" + curlCommand);
         String response = executeCommand(curlCommand);
         System.out.println("TSM response:\n" + response);
 
