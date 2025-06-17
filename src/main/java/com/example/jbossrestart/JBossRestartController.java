@@ -27,8 +27,15 @@ public class JBossRestartController {
 
     @PostMapping("/jboss-restart")
     public String restartJboss(HttpServletRequest request) {
-        String output = executeCommand("sudo /bin/systemctl restart " + JBossService);
-        request.getSession().setAttribute("jbossLog", "JBoss restart initiated.\n\n" + output);
+        String output1 = executeCommand("sudo /bin/systemctl stop " + JBossService);
+        request.getSession().setAttribute("jbossLog", "JBoss stopped.\n\n" + output1);
+
+        String output2 = executeCommand("DBTools -u admin.dbtools -p uf@Ex5YHA -s JQL CLEAR-FILE F.TSA.STATUS");
+        request.getSession().setAttribute("jbossLog", "JBoss stopped.\n\n" + output2);
+
+        String output3 = executeCommand("sudo /bin/systemctl start " + JBossService);
+        request.getSession().setAttribute("jbossLog", "JBoss stopped.\n\n" + output3);
+
         return "redirect:/jboss-restart";
     }
 
