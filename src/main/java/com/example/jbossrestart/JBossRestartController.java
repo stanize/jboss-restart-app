@@ -80,17 +80,17 @@ public class JBossRestartController {
         output.append("✔️ TSA.STATUS cleared successfully.\n\n");
 
         output.append("🔄Starting TSM Service...\n");
-        String result = tsmStatusService.startTsmService();
+        String startResult = tsmStatusService.startTsmService();
 
         output.append("✔️ TSM Start triggered.\n\n");
-        output.append(result);
+        output.append(startResult);
 
 
         output.append("🔄Starting TSM Service (TAFJJEE)...\n");
-        String result = tsmStatusService.startTsmTafjjee();
+        String startTAFJresult = tsmStatusService.startTsmTafjjee();
 
         output.append("✔️ TSM Start (TAFJJEE) triggered.\n\n");
-        output.append(result);
+        output.append(startTAFJresult);
 
 
 
