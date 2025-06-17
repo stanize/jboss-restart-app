@@ -26,7 +26,11 @@ public class TsmStatusService {
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
+            System.out.println(request.toString());
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println(response.toString());
 
             String body = response.body();
 
