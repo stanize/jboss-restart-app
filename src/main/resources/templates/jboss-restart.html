@@ -126,15 +126,12 @@
 
     <div th:if="${jbossStatus == 'Initializing'}" class="spinner"></div>
 
-    <form method="post" th:action="@{/jboss-restart}" onsubmit="disableButton()">
-        <button type="submit"
-                id="restartBtn"
-                th:disabled="${jbossStatus.equalsIgnoreCase('Initializing')}"
-                onclick="disableButton()">
+    <form method="post" th:action="@{/jboss-restart}">
+        <button type="submit" id="restartBtn">
             Restart JBoss
         </button>
-
     </form>
+
 
     <div class="log" th:if="${session.jbossLog}" th:text="${session.jbossLog}"></div>
 
