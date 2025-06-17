@@ -1,4 +1,4 @@
-package com.transact.dashboard;
+package com.example.jbossrestart;
 
 import org.springframework.stereotype.Service;
 import java.net.http.*;
