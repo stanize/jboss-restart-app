@@ -27,14 +27,22 @@ public class JBossRestartController {
 
     @PostMapping("/jboss-restart")
     public String restartJboss(HttpServletRequest request) {
-        String output1 = executeCommand("sudo /bin/systemctl stop " + JBossService);
-        request.getSession().setAttribute("jbossLog", "JBoss stopped.\n\n" + output1);
+        StringBuilder output = new StringBuilder();
 
-        String output2 = executeCommand("DBTools -u admin.dbtools -p uf@Ex5YHA -s JQL CLEAR-FILE F.TSA.STATUS");
-        request.getSession().setAttribute("jbossLog", "JBoss stopped.\n\n" + output2);
+        output.append("🔴 Stopping JBoss...\n");
+        String stopResult = executeCommand("sudo /bin/systemctl stop " + JBossService);
+        output.append("✔️ JBoss successfully stopped.\n\n");
 
-        String output3 = executeCommand("sudo /bin/systemctl start " + JBossService);
-        request.getSession().setAttribute("jbossLog", "JBoss stopped.\n\n" + output3);
+        output.append("🧹 Clearing TSA.STATUS data...\n");
+        String dbtoolsResult = executeCommand("DBTools -u admin.dbtools -p uf@Ex5YHA -s JQL CLEAR-FILE F.TSA.STATUS");
+        output.append("✔️ TSA.STATUS cleared successfully.\n\n");
+
+        output.append("🟢 Starting JBoss...\n");
+        String startResult = executeCommand("sudo /bin/systemctl start " + JBossService);
+        output.append("✔️ JBoss started successfully.\n\n");
+
+        request.getSession().setAttribute("jbossLog", output.toString());
+
 
         return "redirect:/jboss-restart";
     }
