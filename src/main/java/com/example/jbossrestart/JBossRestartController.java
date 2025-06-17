@@ -101,15 +101,12 @@ public class JBossRestartController {
     }
 
     private String getTsmStatus(HttpServletRequest request) {
-        String jsonBody = "{\"ofsRequest\":\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \"}";
-        String curlCommand = String.join(" ",
-                "curl -s --request POST",
-                "--url http://localhost:8080/TAFJRestServices/resources/ofs",
-                "--header \"Authorization: Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==\"",
-                "--header \"cache-control: no-cache\"",
-                "--header \"content-type: application/json\"",
-                "--data '" + jsonBody + "'"
-        );
+        String curlCommand = "bash -c 'curl -s --request POST " +
+                "--url http://localhost:8080/TAFJRestServices/resources/ofs " +
+                "--header \"Authorization: Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==\" " +
+                "--header \"cache-control: no-cache\" " +
+                "--header \"content-type: application/json\" " +
+                "--data \"{\\\"ofsRequest\\\":\\\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \\\"}\"'";
 
         System.out.println("TSM request:\n" + curlCommand);
         String response = executeCommand(curlCommand);
