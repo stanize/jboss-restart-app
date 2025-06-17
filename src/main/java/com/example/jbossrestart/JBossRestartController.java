@@ -116,6 +116,8 @@ public class JBossRestartController {
 
         String extracted = extractServiceControl(output);
 
+        return output;
+
         if (extracted == null) return "UNKNOWN";
 
         int equalsIndex = extracted.indexOf('=');
@@ -124,6 +126,7 @@ public class JBossRestartController {
         }
 
         return "UNKNOWN";
+
     }
 
     private String extractServiceControl(String ofsResponse) {
