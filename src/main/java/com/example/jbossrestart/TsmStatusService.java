@@ -9,17 +9,19 @@ import java.util.regex.*;
 @Service
 public class TsmStatusService {
 
+    private static final String TSM_URL = "http://localhost:8080/TAFJRestServices/resources/ofs";
+
+    private static final String ENCODED_AUTH = "dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==";
+
     public String getTsmStatus() {
         try {
-            // Use provided encoded base64 credentials directly
-            String encodedAuth = "dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==";
 
             String requestBody = "{\"ofsRequest\":\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \"}";
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8080/TAFJRestServices/resources/ofs"))
-                    .header("Authorization", "Basic " + encodedAuth)
+                    .uri(URI.create(TSM_URL))
+                    .header("Authorization", "Basic " + ENCODED_AUTH)
                     .header("Content-Type", "application/json")
                     .header("Cache-Control", "no-cache")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
@@ -46,4 +48,32 @@ public class TsmStatusService {
             return "ERROR";
         }
     }
+
+    public String restartTsmService() {
+        try {
+
+            String requestBody = "{\"ofsRequest\":\"TSA.SERVICE,START/I/PROCESS,MB.OFFICER/123123,TSM \"}";
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(TSM_URL))
+                    .header("Authorization", "Basic " + ENCODED_AUTH)
+                    .header("Content-Type", "application/json")
+                    .header("Cache-Control", "no-cache")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            System.out.println("TSM RESTART REQUEST:\n" + requestBody);
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("TSM RESTART RESPONSE:\n" + response.body());
+
+            return response.body();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "ERROR";
+        }
+    }
+
 }

@@ -62,6 +62,24 @@ public class JBossRestartController {
         return "redirect:/jboss-restart";
     }
 
+
+    @PostMapping("/tsm-restart")
+    public String restartTsm(HttpServletRequest request) {
+        StringBuilder output = new StringBuilder();
+
+        output.append("🔄 Restarting TSM Service...\n");
+
+        String result = tsmStatusService.restartTsmService();
+
+        output.append("✔️ TSM Restart triggered.\n\n");
+        output.append(result);
+
+        request.getSession().setAttribute("jbossLog", output.toString());
+
+        return "redirect:/jboss-restart";
+    }
+
+
     private String checkJbossStatus() {
         boolean active = isServiceActive();
         boolean portOpen = isSocketOpen();

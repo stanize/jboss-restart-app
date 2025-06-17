@@ -138,6 +138,10 @@
              th:text="'Status: ' + ${tsmStatus}"
              th:classappend="${tsmStatus.equalsIgnoreCase('START') ? 'running' : 'stopped'}">
         </div>
+        <form method="post" th:action="@{/tsm-restart}">
+            <button type="submit">Restart TSM</button>
+        </form>
+
     </div>
 
     <!-- 🔹 Log Block (moved to end) -->
