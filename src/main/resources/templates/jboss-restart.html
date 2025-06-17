@@ -77,8 +77,8 @@
 
     <div class="status"
          th:text="'Status: ' + ${jbossStatus}"
-         th:classappend="${jbossStatus.equalsIgnoreCase('Running')} ? ' running' :
-                         ${jbossStatus.equalsIgnoreCase('Initializing')} ? ' initializing' : ' stopped'">
+         th:classappend="${jbossStatus.equalsIgnoreCase('Running') ? 'running' :
+                      (jbossStatus.equalsIgnoreCase('Initializing') ? 'initializing' : 'stopped')}">
     </div>
 
     <form method="post" th:action="@{/jboss-restart}">
