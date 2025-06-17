@@ -109,6 +109,7 @@ public class JBossRestartController {
                 "--data '{\"ofsRequest\":\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \"}'";
 
         String output = executeCommand(curlCommand);
+        System.out.println(output);
 
         String extracted = extractServiceControl(output);
 
