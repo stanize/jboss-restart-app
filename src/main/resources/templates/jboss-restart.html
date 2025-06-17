@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>JBoss Control</title>
+    <meta http-equiv="refresh" content="3" th:if="${jbossStatus != 'Running'}">
     <style>
         body {
             font-family: sans-serif;
@@ -40,6 +41,10 @@
             color: red;
         }
 
+        .status.initializing {
+            color: orange;
+        }
+
         button {
             padding: 12px 24px;
             font-size: 16px;
@@ -72,7 +77,8 @@
 
     <div class="status"
          th:text="'Status: ' + ${jbossStatus}"
-         th:classappend="${jbossStatus.equalsIgnoreCase('Running')} ? ' running' : ' stopped'">
+         th:classappend="${jbossStatus.equalsIgnoreCase('Running')} ? ' running' :
+                         ${jbossStatus.equalsIgnoreCase('Initializing')} ? ' initializing' : ' stopped'">
     </div>
 
     <form method="post" th:action="@{/jboss-restart}">
