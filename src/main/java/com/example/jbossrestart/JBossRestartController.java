@@ -26,10 +26,18 @@ public class JBossRestartController {
     private static final String TSM_URL = "http://localhost:8080/TAFJRestServices/resources/ofs";
     private static final String TSM_AUTH_HEADER = "Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==";
 
+    @Autowired
+    private TsmStatusService tsmStatusService;
+
     @GetMapping("/jboss-restart")
     public String showDashboard(Model model, HttpServletRequest request) {
         model.addAttribute("jbossStatus", checkJbossStatus());
-        model.addAttribute("tsmStatus", getTsmStatus(request));
+        String tsmStatus = tsmStatusService.getTsmStatus();
+        model.addAttribute("tsmStatus", tsmStatus);
+
+        String tsmClass = tsmStatus.equals("START") ? "green" :
+                tsmStatus.equals("STOP") ? "red" : "yellow";
+        model.addAttribute("tsmClass", tsmClass);
         model.addAttribute("jbossLog", request.getSession().getAttribute("jbossLog"));
         request.getSession().removeAttribute("jbossLog");
         return "jboss-restart";
@@ -101,36 +109,36 @@ public class JBossRestartController {
         return output.toString();
     }
 
-    private String getTsmStatus(HttpServletRequest request) {
-        String curlCommand = "'curl -s --request POST " +
-                "--url http://localhost:8080/TAFJRestServices/resources/ofs " +
-                "--header \"Authorization: Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==\" " +
-                "--header \"cache-control: no-cache\" " +
-                "--header \"content-type: application/json\" " +
-                "--data \"{\\\"ofsRequest\\\":\\\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \\\"}\"'";
+//    private String getTsmStatus(HttpServletRequest request) {
+//        String curlCommand = "'curl -s --request POST " +
+//                "--url http://localhost:8080/TAFJRestServices/resources/ofs " +
+//                "--header \"Authorization: Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==\" " +
+//                "--header \"cache-control: no-cache\" " +
+//                "--header \"content-type: application/json\" " +
+//                "--data \"{\\\"ofsRequest\\\":\\\"TSA.SERVICE,/S/PROCESS,MB.OFFICER/123123,TSM \\\"}\"'";
+//
+//        System.out.println("TSM request:\n" + curlCommand);
+//        String response = executeCommand(curlCommand);
+//        System.out.println("TSM response:\n" + response);
+//
+//        System.out.println("-----");
+//
+//        String extracted = extractServiceControl(response);
+//
+//        if (extracted == null) return "UNKNOWN";
+//
+//        int equalsIndex = extracted.indexOf('=');
+//        if (equalsIndex != -1 && equalsIndex + 1 < extracted.length()) {
+//            return extracted.substring(equalsIndex + 1).trim();
+//        }
+//
+//        return "UNKNOWN";
+//    }
 
-        System.out.println("TSM request:\n" + curlCommand);
-        String response = executeCommand(curlCommand);
-        System.out.println("TSM response:\n" + response);
-
-        System.out.println("-----");
-
-        String extracted = extractServiceControl(response);
-
-        if (extracted == null) return "UNKNOWN";
-
-        int equalsIndex = extracted.indexOf('=');
-        if (equalsIndex != -1 && equalsIndex + 1 < extracted.length()) {
-            return extracted.substring(equalsIndex + 1).trim();
-        }
-
-        return "UNKNOWN";
-    }
-
-    private String extractServiceControl(String ofsResponse) {
-        if (ofsResponse == null) return null;
-        Pattern pattern = Pattern.compile("SERVICE\\.CONTROL:([^,]*)");
-        Matcher matcher = pattern.matcher(ofsResponse);
-        return matcher.find() ? matcher.group(1).trim() : null;
-    }
+//    private String extractServiceControl(String ofsResponse) {
+//        if (ofsResponse == null) return null;
+//        Pattern pattern = Pattern.compile("SERVICE\\.CONTROL:([^,]*)");
+//        Matcher matcher = pattern.matcher(ofsResponse);
+//        return matcher.find() ? matcher.group(1).trim() : null;
+//    }
 }
