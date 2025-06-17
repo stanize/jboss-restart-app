@@ -49,7 +49,7 @@ public class TsmStatusService {
         }
     }
 
-    public String restartTsmService() {
+    public String startTsmService() {
         try {
 
             String requestBody = "{\"ofsRequest\":\"TSA.SERVICE,START/I/PROCESS,MB.OFFICER/123123,TSM \"}";
@@ -63,16 +63,65 @@ public class TsmStatusService {
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
-            System.out.println("TSM RESTART REQUEST:\n" + requestBody);
+            System.out.println("TSM START REQUEST:\n" + requestBody);
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("TSM RESTART RESPONSE:\n" + response.body());
+            System.out.println("TSM START RESPONSE:\n" + response.body());
 
             return response.body();
         } catch (Exception e) {
             e.printStackTrace();
             return "ERROR";
+        }
+    }
+    public String stopTsmService() {
+        try {
+
+            String requestBody = "{\"ofsRequest\":\"TSA.SERVICE,STOP/I/PROCESS,MB.OFFICER/123123,TSM \"}";
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(TSM_URL))
+                    .header("Authorization", "Basic " + ENCODED_AUTH)
+                    .header("Content-Type", "application/json")
+                    .header("Cache-Control", "no-cache")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            System.out.println("TSM STOP REQUEST:\n" + requestBody);
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("TSM STOP RESPONSE:\n" + response.body());
+
+            return response.body();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "ERROR";
+        }
+    }
+
+    public String startTsmTafjjee() {
+        try {
+            String url = "http://localhost:8080/TAFJRestServices/resources/trun";
+
+            String formData = "command=START.TSM+1&inParameters=param%3DOUT.PARAM";
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Authorization", "Basic " + ENCODED_AUTH) // ✅ Using shared encoded string
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .POST(HttpRequest.BodyPublishers.ofString(formData))
+                    .build();
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.body();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "ERROR: " + e.getMessage();
         }
     }
 

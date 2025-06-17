@@ -67,16 +67,32 @@ public class JBossRestartController {
     public String restartTsm(HttpServletRequest request) {
         StringBuilder output = new StringBuilder();
 
-        output.append("🔄 Restarting TSM Service...\n");
 
-        String result = tsmStatusService.restartTsmService();
+        output.append("🔄 Stopping TSM Service...\n");
+        String result = tsmStatusService.stopTsmService();
+
+        output.append("✔️ TSM Stop triggered.\n\n");
+        output.append(result);
+
 
         output.append("🧹 Clearing TSA.STATUS data...\n");
         executeCommand("DBTools -u admin.dbtools -p uf@Ex5YHA -s JQL CLEAR-FILE F.TSA.STATUS");
         output.append("✔️ TSA.STATUS cleared successfully.\n\n");
 
-        output.append("✔️ TSM Restart triggered.\n\n");
+        output.append("🔄Starting TSM Service...\n");
+        String result = tsmStatusService.startTsmService();
+
+        output.append("✔️ TSM Start triggered.\n\n");
         output.append(result);
+
+
+        output.append("🔄Starting TSM Service (TAFJJEE)...\n");
+        String result = tsmStatusService.startTsmTafjjee();
+
+        output.append("✔️ TSM Start (TAFJJEE) triggered.\n\n");
+        output.append(result);
+
+
 
         request.getSession().setAttribute("jbossLog", output.toString());
 
