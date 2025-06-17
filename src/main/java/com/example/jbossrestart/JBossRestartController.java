@@ -118,14 +118,14 @@ public class JBossRestartController {
 
         return output;
 
-        if (extracted == null) return "UNKNOWN";
-
-        int equalsIndex = extracted.indexOf('=');
-        if (equalsIndex != -1 && equalsIndex + 1 < extracted.length()) {
-            return extracted.substring(equalsIndex + 1).trim();
-        }
-
-        return "UNKNOWN";
+//        if (extracted == null) return "UNKNOWN";
+//
+//        int equalsIndex = extracted.indexOf('=');
+//        if (equalsIndex != -1 && equalsIndex + 1 < extracted.length()) {
+//            return extracted.substring(equalsIndex + 1).trim();
+//        }
+//
+//        return "UNKNOWN";
 
     }
 
