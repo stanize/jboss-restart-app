@@ -1,0 +1,21 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.18)
+
+2025-06-17 20:54:56.305  INFO 586315 --- [           main] c.e.j.JBossRestartApplication            : Starting JBossRestartApplication v0.0.1-SNAPSHOT using Java 11.0.25 on gcvmbmlocalacncfg01 with PID 586315 (/mnt/temenos/work/jboss-restart-app/target/jboss-restart-0.0.1-SNAPSHOT.jar started by transactuser in /mnt/temenos/work/jboss-restart-app)
+2025-06-17 20:54:56.310  INFO 586315 --- [           main] c.e.j.JBossRestartApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-06-17 20:54:57.807  INFO 586315 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2025-06-17 20:54:57.822  INFO 586315 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-17 20:54:57.823  INFO 586315 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.83]
+2025-06-17 20:54:57.929  INFO 586315 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-17 20:54:57.930  INFO 586315 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1521 ms
+2025-06-17 20:54:58.555  INFO 586315 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2025-06-17 20:54:58.580  INFO 586315 --- [           main] c.e.j.JBossRestartApplication            : Started JBossRestartApplication in 2.977 seconds (JVM running for 3.528)
+2025-06-17 20:55:32.798  INFO 586315 --- [nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-17 20:55:32.799  INFO 586315 --- [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-17 20:55:32.800  INFO 586315 --- [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms

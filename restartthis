@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Run Maven build
+mvn clean package
+
+# Check if the build was successful
+if [ $? -ne 0 ]; then
+    echo "Build failed. Please fix the errors above."
+    read -p "Press Enter to exit..."
+    exit 1
+fi
+
+# Optional pause for manual inspection
+echo "Build succeeded. Starting the application in 3 seconds..."
+sleep 3
+
+# Variables
+JAR_PATH=$(ls target/*.jar 2>/dev/null)
+PORT=8081
+LOG_FILE="application.log"
+
+if [ -z "$JAR_PATH" ]; then
+    echo "No JAR file found in target/. Build might have failed or produced nothing."
+    exit 1
+fi
+
+# Clear the log file before each run
+> "$LOG_FILE"
+
+# Add a header with timestamp
+echo "=== Application started at $(date '+%Y-%m-%d %H:%M:%S') ===" >> "$LOG_FILE"
+
+echo "Starting Spring Boot application on port $PORT..."
+echo "Logs will be written to $LOG_FILE"
+
+# Run the JAR and capture logs
+java -jar $JAR_PATH --server.port=$PORT 2>&1 | tee "$LOG_FILE"

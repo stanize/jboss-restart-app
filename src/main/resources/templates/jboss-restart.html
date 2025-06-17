@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Restart JBoss</title>
+</head>
+<body>
+<h1>Restart JBoss</h1>
+<form method="post" th:action="@{/restart}">
+    <button type="submit">Restart</button>
+</form>
+<div th:if="${session.jbossLog}" th:text="${session.jbossLog}"></div>
+</body>
+</html>
