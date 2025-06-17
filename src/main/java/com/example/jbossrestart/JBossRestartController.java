@@ -85,8 +85,8 @@ public class JBossRestartController {
     private String executeCommand(String command) {
         StringBuilder output = new StringBuilder();
         try {
-            Process process = Runtime.getRuntime().exec(command);
-            process.waitFor();
+            ProcessBuilder builder = new ProcessBuilder("bash", "-c", command);
+            Process process = builder.start();
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()))) {
                 String line;
@@ -94,14 +94,15 @@ public class JBossRestartController {
                     output.append(line).append("\n");
                 }
             }
-        } catch (Exception e) {
+            process.waitFor();
+        } catch (IOException | InterruptedException e) {
             output.append("Error: ").append(e.getMessage());
         }
         return output.toString();
     }
 
     private String getTsmStatus(HttpServletRequest request) {
-        String curlCommand = "bash -c 'curl -s --request POST " +
+        String curlCommand = "'curl -s --request POST " +
                 "--url http://localhost:8080/TAFJRestServices/resources/ofs " +
                 "--header \"Authorization: Basic dGFmai5hZG1pbjpBWElAZ3RwcXJYNC==\" " +
                 "--header \"cache-control: no-cache\" " +
@@ -111,6 +112,8 @@ public class JBossRestartController {
         System.out.println("TSM request:\n" + curlCommand);
         String response = executeCommand(curlCommand);
         System.out.println("TSM response:\n" + response);
+
+        System.out.println("-----");
 
         String extracted = extractServiceControl(response);
 
