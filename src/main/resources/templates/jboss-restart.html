@@ -75,7 +75,7 @@
          th:classappend="${jbossStatus.equalsIgnoreCase('Running')} ? ' running' : ' stopped'">
     </div>
 
-    <form method="post" th:action="@{/restart}">
+    <form method="post" th:action="@{/jboss-restart}">
         <button type="submit">Restart JBoss</button>
     </form>
 
