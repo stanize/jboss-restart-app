@@ -71,6 +71,10 @@ public class JBossRestartController {
 
         String result = tsmStatusService.restartTsmService();
 
+        output.append("🧹 Clearing TSA.STATUS data...\n");
+        executeCommand("DBTools -u admin.dbtools -p uf@Ex5YHA -s JQL CLEAR-FILE F.TSA.STATUS");
+        output.append("✔️ TSA.STATUS cleared successfully.\n\n");
+
         output.append("✔️ TSM Restart triggered.\n\n");
         output.append(result);
 
