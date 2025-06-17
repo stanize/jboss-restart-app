@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git pull
+
 # Run Maven build
 mvn clean package
 
