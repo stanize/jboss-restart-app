@@ -134,8 +134,9 @@
     <!-- 🔹 TSM Block -->
     <div class="container">
         <h1>TSM Service Status</h1>
-        <div th:class="'status-box ' + ${tsmClass}">
-            <span th:text="'Status: ' + ${tsmStatus}"></span>
+        <div class="status"
+             th:text="'Status: ' + ${tsmStatus}"
+             th:classappend="${tsmStatus.equalsIgnoreCase('START') ? 'running' : 'stopped'}">
         </div>
     </div>
 
